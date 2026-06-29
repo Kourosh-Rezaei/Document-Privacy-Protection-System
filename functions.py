@@ -1,6 +1,7 @@
 from docx import Document
 import re
-
+import os
+from openpyxl import load_workbook, Workbook
 
 def read_docx(file_path: str) -> str:
     """
@@ -35,3 +36,22 @@ def prepare_data(text: str) -> str:
         })
 
     return data
+
+
+def open_excel(excel_path: str, data: list):
+    """
+    Open an Excel file and write data to it.
+    """
+
+    if os.path.exists(excel_path):
+        workbook = load_workbook(excel_path)
+        sheet = workbook.active
+    else:
+        workbook = Workbook()
+        sheet = workbook.active
+        sheet.append(["Name", "Phone Number"])
+
+    for item in data:
+        sheet.append([item["name"], item["Phone Number"]])
+
+    workbook.save(excel_path)
