@@ -19,13 +19,13 @@ def read_docx(file_path: str) -> str:
         return f"error: {e}"
 
 
-def prepare_data(text: str) -> str:
+def prepare_data(text: str) -> list[dict[str, str]]:
     """
     Find all phone numbers and names and at them to a list of dictionaries
     """
     data = []
 
-    pattern = r'([A-Za-z\s]+)\s+(\+\d{1,3}\s?\d{3}\s?\d{3}\s?\d{4})'
+    pattern = r'(?:[A-Za-z\s,]+)?\s*([A-Z][a-z]+(?:\s+[A-Z][a-z]+)+)\s*,?\s*\+(\d{1,3}\s?\d{3}\s?\d{3}\s?\d{4})'
 
     matches = re.findall(pattern, text)
 
@@ -55,3 +55,18 @@ def open_excel(excel_path: str, data: list):
         sheet.append([item["name"], item["Phone Number"]])
 
     workbook.save(excel_path)
+
+
+def remove_phone_numbers(input_file: str, output_file: str):
+    """
+    Remove all phone numbers from a DOCX file.
+    """
+
+    pattern = r'\+\d{1,3}\s?\d{3}\s?\d{3}\s?\d{4}'
+
+    doc = Document(input_file)
+
+    for para in doc.paragraphs:
+        para.text = re.sub(pattern, "", para.text)
+
+    doc.save(output_file)
