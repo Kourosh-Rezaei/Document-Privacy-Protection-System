@@ -79,4 +79,4 @@ Alice Brown,
 - [ ] Validate and normalize phone numbers automatically
 - [ ] Delete communication channels associated with a specific person
 - [ ] Django integration
-- [ ]Telegram bot development
+- [ ] Telegram bot development
