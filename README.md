@@ -80,3 +80,9 @@ Alice Brown,
 - [ ] Delete communication channels associated with a specific person
 - [ ] Django integration
 - [ ] Telegram bot development
+
+## Team
+
+[Kourosh Rezaei (Developer)](https://github.com/Kourosh-Rezaei)
+
+[Daniyal Iran Mehr (Advisor & Manager)](https://github.com/Daniyaliranmehr)
