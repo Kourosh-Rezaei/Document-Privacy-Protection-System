@@ -25,8 +25,7 @@ def prepare_data(text: str) -> list[dict[str, str]]:
     """
     data = []
 
-    pattern = r'(?:[A-Za-z\s,]+)?\s*([A-Z][a-z]+(?:\s+[A-Z][a-z]+)+)\s*,?\s*\+(\d{1,3}\s?\d{3}\s?\d{3}\s?\d{4})'
-
+    pattern = r'([A-Za-z\s]+)\s+(\+\d{1,3}[\s-]?\d{3}[\s-]?\d{3}[\s-]?\d{4})'
     matches = re.findall(pattern, text)
 
     for name, phone in matches:
@@ -62,7 +61,7 @@ def remove_phone_numbers(input_file: str, output_file: str):
     Remove all phone numbers from a DOCX file.
     """
 
-    pattern = r'\+\d{1,3}\s?\d{3}\s?\d{3}\s?\d{4}'
+    pattern = r'([A-Za-z\s]+)\s+(\+\d{1,3}[\s-]?\d{3}[\s-]?\d{3}[\s-]?\d{4})'
 
     doc = Document(input_file)
 

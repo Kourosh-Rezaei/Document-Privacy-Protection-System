@@ -8,11 +8,7 @@ def main():
 
     content = read_docx(file_path)
 
-    print("--- The content of DOCX file ---")
-
-    print(content)
-
-    print("-------------------------------")
+    
 
     data = prepare_data(content)
 
