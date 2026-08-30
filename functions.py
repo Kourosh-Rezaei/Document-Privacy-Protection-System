@@ -24,8 +24,7 @@ def prepare_data(text: str) -> list[dict[str, str]]:
     Find all phone numbers and names and at them to a list of dictionaries
     """
     data = []
-
-    pattern = r'([A-Za-z\s]+)\s+(\+\d{1,3}[\s-]?\d{3}[\s-]?\d{3}[\s-]?\d{4})'
+    pattern = r'([A-Za-z]+(?:\s+[A-Za-z]+)*)\s+((?<!\w)(?:\+|00)?(?:\d{1,3}[\s-]?)?(?:\d{2,4}[\s-]?){2,4}\d(?!\w))'
     matches = re.findall(pattern, text)
 
     for name, phone in matches:
@@ -56,16 +55,23 @@ def open_excel(excel_path: str, data: list):
     workbook.save(excel_path)
 
 
+
 def remove_phone_numbers(input_file: str, output_file: str):
     """
     Remove all phone numbers from a DOCX file.
     """
-
-    pattern = r'([A-Za-z\s]+)\s+(\+\d{1,3}[\s-]?\d{3}[\s-]?\d{3}[\s-]?\d{4})'
-
+    pattern = r'(?<!\w)(?:\+|00)?(?:\d{1,3}[\s-]?)?(?:\d{2,4}[\s-]?){2,4}\d(?!\w)'
     doc = Document(input_file)
 
+    def replace_phone(match):
+        phone = match.group()
+        digits = re.sub(r"\D", "", phone)
+
+        if 10 <= len(digits) <= 15:
+            return ""
+        return phone
+
     for para in doc.paragraphs:
-        para.text = re.sub(pattern, "", para.text)
+        para.text = re.sub(pattern, replace_phone, para.text)
 
     doc.save(output_file)
