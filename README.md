@@ -68,7 +68,8 @@ Alice Brown,
 
 ## Future Improvements
 
-- [ ] support other formats
+- [ ] support TXT format
+- [ ] support PDF format
 - [ ] Remove specific phone numbers
 - [ ] Remove other contact addresses
 - [ ] Process multiple documents at a time
