@@ -17,8 +17,20 @@ def read_docx(file_path: str) -> str:
 
     except Exception as e:
         return f"error: {e}"
+    
 
+def read_txt(file_path: str) -> str:
+    """
+    Extract the content of the TXT file.
+    """
+    try:
+        with open(file_path, "r", encoding="utf-8") as file:
+            return file.read()
 
+    except Exception as e:
+        return f"error: {e}"
+
+    
 def prepare_data(text: str) -> list[dict[str, str]]:
     """
     Find all phone numbers and names and at them to a list of dictionaries
@@ -56,7 +68,7 @@ def open_excel(excel_path: str, data: list):
 
 
 
-def remove_phone_numbers(input_file: str, output_file: str):
+def remove_phone_numbers_docx(input_file: str, output_file: str):
     """
     Remove all phone numbers from a DOCX file.
     """
@@ -75,3 +87,34 @@ def remove_phone_numbers(input_file: str, output_file: str):
         para.text = re.sub(pattern, replace_phone, para.text)
 
     doc.save(output_file)
+
+
+def remove_phone_numbers_txt(input_file: str, output_file: str):
+    """
+    Remove all phone numbers from a TXT file.
+    """
+
+    pattern = r'(?<!\w)(?:\+|00)?(?:\d{1,3}[\s-]?)?(?:\d{2,4}[\s-]?){2,4}\d(?!\w)'
+
+    try:
+        
+        text = read_txt(input_file)
+
+        def replace_phone(match):
+            phone = match.group()
+
+            digits = re.sub(r"\D", "", phone)
+
+            if 10 <= len(digits) <= 15:
+                return ""
+
+            return phone
+
+        text = re.sub(pattern, replace_phone, text)
+
+        with open(output_file, "w", encoding="utf-8") as file:
+            file.write(text)
+
+    except Exception as e:
+        return f"error: {e}"
+    
