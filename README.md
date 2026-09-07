@@ -68,7 +68,7 @@ Alice Brown,
 
 ## Future Improvements
 
-- [ ] support TXT format
+- [x] support TXT format
 - [ ] support PDF format
 - [ ] Remove specific phone numbers
 - [ ] Remove other contact addresses
