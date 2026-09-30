@@ -1,3 +1,9 @@
+from dotenv import load_dotenv
+load_dotenv()
+
+import os
+token = os.getenv("BOT_TOKEN")
+
 from telegram import Update
 
 from telegram.ext import (
@@ -7,6 +13,7 @@ from telegram.ext import (
     MessageHandler,
     filters
 )
+
 
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -28,7 +35,7 @@ async def handle_documnet(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 def main():
     application = Application.builder().token(
-        "8628833548:AAEt1CC8MaPhMQq6pkpoDyyvx2aSuvSfAE8").build()
+        token).build()
     
     application.add_handler(CommandHandler("start", start))
 
