@@ -16,7 +16,6 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 async def handle_documnet(update: Update, context: ContextTypes.DEFAULT_TYPE):
     document = update.message.document
 
-<<<<<<< HEAD
     if (document.file_name.lower().endswith(".docx") or 
         document.file_name.lower().endswith("txt")):
         await update.message.reply_text(
@@ -25,15 +24,6 @@ async def handle_documnet(update: Update, context: ContextTypes.DEFAULT_TYPE):
     else:
         await update.message.reply_text(
             "Please send a DOCX/TXT file.")
-=======
-    if document.file_name.lower().endswith(".docx"):
-        await update.message.reply_text(
-            "DOCX file received.")
-
-    else:
-        await update.message.reply_text(
-            "Please send a DOCX file.")
->>>>>>> 11de35f889a27f44bd19352725eb372cf4a79e4f
     
 
 def main():
@@ -49,10 +39,6 @@ def main():
     application.run_polling()
 
 
-<<<<<<< HEAD
 
 if __name__ == "__main__":
-=======
-if name == "main":
->>>>>>> 11de35f889a27f44bd19352725eb372cf4a79e4f
     main()
