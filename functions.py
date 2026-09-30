@@ -2,6 +2,9 @@ from docx import Document
 import re
 import os
 from openpyxl import load_workbook, Workbook
+import pymupdf
+
+
 
 def read_docx(file_path: str) -> str:
     """
@@ -30,6 +33,26 @@ def read_txt(file_path: str) -> str:
     except Exception as e:
         return f"error: {e}"
 
+
+def read_pdf(file_path: str) -> str:
+    """
+    Extract text from a PDF file.
+    """
+    try:
+        document = pymupdf.open(file_path)
+
+        full_text = []
+
+        for page in document:
+            full_text.append(page.get_text())
+
+        document.close()
+
+        return "\n".join(full_text)
+
+    except Exception as e:
+        return f"error: {e}"
+    
     
 def prepare_data(text: str) -> list[dict[str, str]]:
     """
@@ -117,4 +140,115 @@ def remove_phone_numbers_txt(input_file: str, output_file: str):
 
     except Exception as e:
         return f"error: {e}"
-    
+
+
+def remove_phone_numbers_pdf(input_file: str, output_file: str):
+    """
+    Remove phone numbers from a PDF file
+    and save the result as a new PDF file.
+    """
+
+    pattern = r'(?<!\w)(?:\+\d{1,3}[\s-]?)?(?:\d{3}[\s-]?\d{3}[\s-]?\d{4}|\d{10})(?!\w)'
+
+    try:
+
+        document = pymupdf.open(input_file)
+
+        for page in document:
+
+            words = page.get_text("words")
+
+            words.sort(
+                key=lambda word: (
+                    word[5],
+                    word[6],
+                    word[7]
+                )
+            )
+
+            redactions = []
+
+            for i in range(len(words)):
+
+                selected_words = []
+
+                for j in range(i, min(i + 5, len(words))):
+
+                    selected_words.append(words[j])
+
+                    text = " ".join(
+                        word[4]
+                        for word in selected_words
+                    )
+
+                    matches = re.finditer(
+                        pattern,
+                        text
+                    )
+
+                    for match in matches:
+
+                        phone = match.group()
+
+                        digits = re.sub(
+                            r"\D",
+                            "",
+                            phone
+                        )
+
+                        if 10 <= len(digits) <= 15:
+
+                            match_start = match.start()
+                            match_end = match.end()
+
+                            current_position = 0
+
+                            for word in selected_words:
+
+                                word_text = word[4]
+
+                                word_start = current_position
+                                word_end = current_position + len(word_text)
+
+                                if (
+                                    word_end > match_start
+                                    and word_start < match_end
+                                ):
+
+                                    rectangle = pymupdf.Rect(
+                                        word[0],
+                                        word[1],
+                                        word[2],
+                                        word[3]
+                                    )
+
+                                    redactions.append(
+                                        rectangle
+                                    )
+
+                                current_position = word_end + 1
+
+                    if list(
+                        re.finditer(
+                            pattern,
+                            text
+                        )
+                    ):
+                        break
+
+            for rectangle in redactions:
+
+                page.add_redact_annot(
+                    rectangle,
+                    fill=(1, 1, 1)
+                )
+
+            page.apply_redactions()
+
+        document.save(output_file)
+
+        document.close()
+
+    except Exception as e:
+
+        return f"error: {e}"
