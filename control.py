@@ -1,26 +1,27 @@
 from functions import (
-    read_docx,
-    read_txt,
-    read_pdf,
-    prepare_data,
     open_excel,
+    prepare_data,
+    read_docx,
+    read_pdf,
+    read_txt,
     remove_phone_numbers_docx,
+    remove_phone_numbers_pdf,
     remove_phone_numbers_txt,
-    remove_phone_numbers_pdf)
+)
 
 
 def main():
-    file_path = r"D:\example.pdf"
+    file_path = r"D:\example.txt"
     excel_path = r"D:\result.xlsx"
-    output_file = r"D:\example_without_phone.pdf"
+    output_file = r"D:\example_without_phone.txt"
 
-    if file_path.endswith(".txt"):  
+    if file_path.lower().endswith(".txt"):  
         content = read_txt(file_path)
 
-    elif file_path.endswith(".docx"):
+    elif file_path.lower().endswith(".docx"):
         content = read_docx(file_path) 
 
-    elif file_path.endswith(".pdf"):
+    elif file_path.lower().endswith(".pdf"):
         content = read_pdf(file_path)       
 
     print(10 * "-", "CONTENT", 10 * "-")
@@ -33,13 +34,13 @@ def main():
 
     open_excel(excel_path, data)
 
-    if file_path.endswith(".txt"):
+    if file_path.lower().endswith(".txt"):
         remove_phone_numbers_txt(file_path, output_file)
 
-    elif file_path.endswith(".docx"):
+    elif file_path.lower().endswith(".docx"):
         remove_phone_numbers_docx(file_path, output_file)
 
-    elif file_path.endswith(".pdf"):
+    elif file_path.lower().endswith(".pdf"):
 
         remove_phone_numbers_pdf(file_path,output_file) 
     

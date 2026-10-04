@@ -1,9 +1,9 @@
-from docx import Document
-import re
 import os
-from openpyxl import load_workbook, Workbook
-import pymupdf
+import re
 
+import pymupdf
+from docx import Document
+from openpyxl import Workbook, load_workbook
 
 
 def read_docx(file_path: str) -> str:
@@ -18,7 +18,7 @@ def read_docx(file_path: str) -> str:
 
         return '\n'.join(full_text)
 
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         return f"error: {e}"
     
 
@@ -30,13 +30,13 @@ def read_txt(file_path: str) -> str:
         with open(file_path, "r", encoding="utf-8") as file:
             return file.read()
 
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         return f"error: {e}"
 
 
 def read_pdf(file_path: str) -> str:
     """
-    Extract text from a PDF file.
+    Extract the content of the PDF file.
     """
     try:
         document = pymupdf.open(file_path)
@@ -50,23 +50,29 @@ def read_pdf(file_path: str) -> str:
 
         return "\n".join(full_text)
 
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         return f"error: {e}"
     
     
 def prepare_data(text: str) -> list[dict[str, str]]:
     """
-    Find all phone numbers and names and at them to a list of dictionaries
+    Find all phone numbers and names and add them to a list of dictionaries.
     """
+
     data = []
-    pattern = r'([A-Za-z]+(?:\s+[A-Za-z]+)*)\s+((?<!\w)(?:\+|00)?(?:\d{1,3}[\s-]?)?(?:\d{2,4}[\s-]?){2,4}\d(?!\w))'
+
+    pattern = r'\b([A-Z][a-z]+(?:\s+[A-Z][a-z]+)?)\s+(?:(\+\d{1,3})\s*)?(\d{3}[\s-]?\d{3}[\s-]?\d{4}|\d{10})\b'
+
     matches = re.findall(pattern, text)
 
-    for name, phone in matches:
+    for name, country_code, phone in matches:
+
+        if country_code:
+            phone = country_code + " " + phone
+
         data.append({
             "name": name.strip(),
-            "Phone Number": phone.strip()
-        })
+            "Phone Number": phone.strip()})
 
     return data
 
@@ -88,7 +94,6 @@ def open_excel(excel_path: str, data: list):
         sheet.append([item["name"], item["Phone Number"]])
 
     workbook.save(excel_path)
-
 
 
 def remove_phone_numbers_docx(input_file: str, output_file: str):
@@ -138,117 +143,51 @@ def remove_phone_numbers_txt(input_file: str, output_file: str):
         with open(output_file, "w", encoding="utf-8") as file:
             file.write(text)
 
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         return f"error: {e}"
 
 
 def remove_phone_numbers_pdf(input_file: str, output_file: str):
     """
-    Remove phone numbers from a PDF file
-    and save the result as a new PDF file.
+    Remove all phone numbers from a PDF file.
     """
 
-    pattern = r'(?<!\w)(?:\+\d{1,3}[\s-]?)?(?:\d{3}[\s-]?\d{3}[\s-]?\d{4}|\d{10})(?!\w)'
+    pattern = r'(?<!\w)(?:\+\d{1,3}\s*)?(?:\d{3}[\s-]?\d{3}[\s-]?\d{4}|\d{10})(?!\w)'
 
     try:
+        text = read_pdf(input_file)
 
-        document = pymupdf.open(input_file)
+        text = re.sub(pattern, "", text)
 
-        for page in document:
+        text = re.sub(r' +([.,])', r'\1', text)
 
-            words = page.get_text("words")
+        text = re.sub(r'\n\s*([.,])', r'\1', text)
 
-            words.sort(
-                key=lambda word: (
-                    word[5],
-                    word[6],
-                    word[7]
-                )
-            )
+        text = re.sub(r'([.,])([A-Za-z])', r'\1 \2', text)
 
-            redactions = []
+        text = re.sub(r' {2,}', ' ', text)
 
-            for i in range(len(words)):
+        create_pdf(text, output_file)
 
-                selected_words = []
-
-                for j in range(i, min(i + 5, len(words))):
-
-                    selected_words.append(words[j])
-
-                    text = " ".join(
-                        word[4]
-                        for word in selected_words
-                    )
-
-                    matches = re.finditer(
-                        pattern,
-                        text
-                    )
-
-                    for match in matches:
-
-                        phone = match.group()
-
-                        digits = re.sub(
-                            r"\D",
-                            "",
-                            phone
-                        )
-
-                        if 10 <= len(digits) <= 15:
-
-                            match_start = match.start()
-                            match_end = match.end()
-
-                            current_position = 0
-
-                            for word in selected_words:
-
-                                word_text = word[4]
-
-                                word_start = current_position
-                                word_end = current_position + len(word_text)
-
-                                if (
-                                    word_end > match_start
-                                    and word_start < match_end
-                                ):
-
-                                    rectangle = pymupdf.Rect(
-                                        word[0],
-                                        word[1],
-                                        word[2],
-                                        word[3]
-                                    )
-
-                                    redactions.append(
-                                        rectangle
-                                    )
-
-                                current_position = word_end + 1
-
-                    if list(
-                        re.finditer(
-                            pattern,
-                            text
-                        )
-                    ):
-                        break
-
-            for rectangle in redactions:
-
-                page.add_redact_annot(
-                    rectangle,
-                    fill=(1, 1, 1)
-                )
-
-            page.apply_redactions()
-
-        document.save(output_file)
-
-        document.close()
-
-    except Exception as e:
-
+    except Exception as e:  # noqa: BLE001
         return f"error: {e}"
+
+
+def create_pdf(text: str, output_file: str):
+    """
+    Create a new PDF file from text.
+    """
+
+    document = pymupdf.open()
+
+    page = document.new_page()
+
+    page.insert_textbox(
+        pymupdf.Rect(50, 50, 550, 800),
+        text,
+        fontsize=11,
+        fontname="helv",
+        color=(0, 0, 0))
+
+    document.save(output_file)
+    document.close()
