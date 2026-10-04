@@ -17,7 +17,7 @@ from telegram.ext import (
 
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text("Hello! Please send me a DOCX/TXT file.")
+    await update.message.reply_text("Hello! Please send me a DOCX/TXT/PDF file.")
 
 
 async def handle_documnet(update: Update, context: ContextTypes.DEFAULT_TYPE):
