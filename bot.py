@@ -27,7 +27,14 @@ async def handle_documnet(update: Update, context: ContextTypes.DEFAULT_TYPE):
         document.file_name.lower().endswith(".txt") or
         document.file_name.lower().endswith(".pdf")):
         await update.message.reply_text("File received.")
-    
+
+        file = await context.bot.getfile(document.file_id)
+
+        file_path = f"input/{document.file_name}"
+        await file.download_to_drive(file_path)
+        
+        await update.message.reply_text("File received. Processing...")
+
     else:
         await update.message.reply_text(
             "Please send a DOCX/TXT/PDF file.")
