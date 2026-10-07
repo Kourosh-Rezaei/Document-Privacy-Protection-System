@@ -54,7 +54,13 @@ async def handle_documnet(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
         excel_path = f"output/{document.file_name}.xlsx"
         open_excel(excel_path, data)
-        
+
+        print("\nopen_excel() executed.")
+
+        clean_file_path = f"output/{document.file_name}"
+        remove_phone_numbers_docx(file_path, clean_file_path)
+
+        print("\nremove_phone_numbers_docx() executed.")
 
         await update.message.reply_text("File received. Processing...")
     else:
@@ -63,6 +69,8 @@ async def handle_documnet(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
   
 def main():
+    print("waiting for using input...")
+
     application = Application.builder().token(token).build()
     
     application.add_handler(CommandHandler("start", start))
