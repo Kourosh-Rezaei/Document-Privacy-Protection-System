@@ -15,6 +15,14 @@ from telegram.ext import (
     filters,
 )
 
+from functions import (
+    prepare_data,
+    read_docx,
+    remove_phone_numbers_docx,
+    remove_phone_numbers_pdf,
+    remove_phone_numbers_txt,
+)
+
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text("Hello! Please send me a DOCX/TXT/PDF file.")
@@ -26,20 +34,23 @@ async def handle_documnet(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if (document.file_name.lower().endswith(".docx") or 
         document.file_name.lower().endswith(".txt") or
         document.file_name.lower().endswith(".pdf")):
-        await update.message.reply_text("File received.")
 
-        file = await context.bot.getfile(document.file_id)
+
+        file = await context.bot.get_file(document.file_id)
 
         file_path = f"input/{document.file_name}"
         await file.download_to_drive(file_path)
-        
-        await update.message.reply_text("File received. Processing...")
 
+        content = read_docx(file_path)
+        print(10 * "-", "CONTENT", 10 * "-")
+        print(content)
+
+        await update.message.reply_text("File received. Processing...")
     else:
         await update.message.reply_text(
             "Please send a DOCX/TXT/PDF file.")
-    
 
+  
 def main():
     application = Application.builder().token(token).build()
     
