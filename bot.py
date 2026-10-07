@@ -44,6 +44,12 @@ async def handle_documnet(update: Update, context: ContextTypes.DEFAULT_TYPE):
         content = read_docx(file_path)
         print(10 * "-", "CONTENT", 10 * "-")
         print(content)
+    
+        print()
+        
+        data = prepare_data(content)
+        print(10 * "-", "DATA", 10 * "-")
+        print(data)
 
         await update.message.reply_text("File received. Processing...")
     else:
