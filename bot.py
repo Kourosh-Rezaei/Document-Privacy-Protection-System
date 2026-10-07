@@ -63,11 +63,16 @@ async def handle_documnet(update: Update, context: ContextTypes.DEFAULT_TYPE):
         print("\nremove_phone_numbers_docx() executed.")
 
         await update.message.reply_text("File received. Processing...")
+
+        await update.message.reply_document(document=excel_path)
+        
+        await update.message.reply_document(document=clean_file_path)
+
     else:
         await update.message.reply_text(
             "Please send a DOCX/TXT/PDF file.")
-
-  
+        
+    
 def main():
     print("waiting for using input...")
 
