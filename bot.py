@@ -18,6 +18,7 @@ from telegram.ext import (
 from functions import (
     prepare_data,
     read_docx,
+    open_excel,
     remove_phone_numbers_docx,
     remove_phone_numbers_pdf,
     remove_phone_numbers_txt,
@@ -46,10 +47,14 @@ async def handle_documnet(update: Update, context: ContextTypes.DEFAULT_TYPE):
         print(content)
     
         print()
-        
+
         data = prepare_data(content)
         print(10 * "-", "DATA", 10 * "-")
         print(data)
+
+        excel_path = f"output/{document.file_name}.xlsx"
+        open_excel(excel_path, data)
+        
 
         await update.message.reply_text("File received. Processing...")
     else:
