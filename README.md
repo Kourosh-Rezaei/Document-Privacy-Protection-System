@@ -22,6 +22,9 @@ The project currently supports **DOCX**, **TXT**, and **PDF** files.
 - `python-docx` 1.2.0
 - `openpyxl` 3.1.5
 - `PyMuPDF` 1.28.2
+- `python-dotenv` ==  1.2.3
+- `python-telegram-bot` == 22.8
+- `httpx` == 0.28.1
 
 Install the dependencies:
 

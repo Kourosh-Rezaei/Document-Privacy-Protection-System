@@ -11,9 +11,9 @@ from functions import (
 
 
 def main():
-    file_path = r"D:\example.txt"
+    file_path = r"D:\example.pdf"
     excel_path = r"D:\result.xlsx"
-    output_file = r"D:\example_without_phone.txt"
+    output_file = r"D:\example_without_phone.pdf"
 
     if file_path.lower().endswith(".txt"):  
         content = read_txt(file_path)
