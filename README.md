@@ -148,17 +148,10 @@ Tests should cover successful processing and relevant edge cases for each functi
 
 - [x] support TXT format
 - [x] support PDF format
-- [ ] Remove specific phone numbers
-- [ ] Remove other contact addresses
-- [ ] Process multiple documents at a time
-- [ ] Add unit tests
-- [ ] Add Docker support
-- [ ] Detect phone numbers from multiple international formats
-- [ ] Encrypt exported Excel files
-- [ ] Validate and normalize phone numbers automatically
-- [ ] Delete communication channels associated with a specific person
-- [ ] Django integration
-- [ ] Telegram bot development
+- [x] Add unit tests
+- [x] Detect phone numbers from multiple international formats
+- [ ] website development
+- [x] Telegram bot development
 
 ## Team
 
