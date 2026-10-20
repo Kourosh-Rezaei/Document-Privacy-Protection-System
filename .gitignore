@@ -3,3 +3,7 @@ __pycache__/
 *.pyc
 
 .env
+
+# Website temporary files
+uploads/
+outputs/

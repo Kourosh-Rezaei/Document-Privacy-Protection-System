@@ -4,3 +4,4 @@ pymupdf == 1.28.2
 python-dotenv ==  1.2.3
 python-telegram-bot == 22.8
 httpx == 0.28.1
+Flask == 3.1.2

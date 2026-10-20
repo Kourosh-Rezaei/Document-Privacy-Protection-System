@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>حریم‌بان اسناد</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="page-bg" aria-hidden="true"></div>
+
+    <header class="topbar">
+        <div class="brand">
+            <span class="shield" aria-hidden="true">
+                <svg viewBox="0 0 24 24" width="28" height="28" fill="none">
+                    <path d="M12 3.2l7.2 3v5.4c0 4.4-3 8.2-7.2 9.4-4.2-1.2-7.2-5-7.2-9.4V6.2L12 3.2z" stroke="currentColor" stroke-width="1.6"/>
+                    <path d="M8.8 12.1l2.1 2.1 4.3-4.4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </span>
+            <div>
+                <strong>حریم‌بان اسناد</strong>
+                <span>Document Privacy</span>
+            </div>
+        </div>
+        <p class="topbar-note">اجرا روی رایانه محلی</p>
+    </header>
+
+    <main class="layout">
+        <section class="hero">
+            <p class="kicker">سامانه پردازش محرمانه اسناد</p>
+            <h1>حفاظت هوشمند از اسناد</h1>
+            <p class="lead">
+                فایل را بارگذاری کنید تا نام‌ها و شماره‌های تلفن استخراج شوند،
+                در فایل Excel ذخیره گردند و نسخه‌ای بدون شماره تلفن برای دانلود آماده شود.
+            </p>
+        </section>
+
+        <section class="panel upload-panel">
+            <form id="upload-form" novalidate>
+                <label class="dropzone" for="document" id="dropzone">
+                    <input
+                        id="document"
+                        name="document"
+                        type="file"
+                        accept=".docx,.txt,.pdf,application/pdf,text/plain,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                        required>
+                    <span class="drop-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" width="36" height="36" fill="none">
+                            <path d="M12 16V7M12 7l-3.2 3.2M12 7l3.2 3.2" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+                            <path d="M5 16.8V18a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-1.2" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+                        </svg>
+                    </span>
+                    <span class="dropzone-title">انتخاب فایل یا کشیدن و رها کردن</span>
+                    <span class="dropzone-hint">فایل را اینجا رها کنید یا برای انتخاب کلیک کنید</span>
+                    <span id="file-name" class="file-name">هنوز فایلی انتخاب نشده است.</span>
+                </label>
+
+                <ul class="chips" aria-label="فرمت‌ها و محدودیت حجم">
+                    <li>DOCX</li>
+                    <li>TXT</li>
+                    <li>PDF</li>
+                    <li>حداکثر ۱۰ مگابایت</li>
+                </ul>
+
+                <button type="submit" id="submit-btn">پردازش فایل</button>
+            </form>
+
+            <p id="status" class="status" hidden></p>
+
+            <section id="result" class="result" hidden>
+                <h2>خروجی آماده است</h2>
+                <p id="result-summary"></p>
+                <div class="actions">
+                    <a id="excel-link" class="button secondary" href="#">دانلود فایل Excel</a>
+                    <a id="cleaned-link" class="button" href="#">دانلود سند پاک‌سازی‌شده</a>
+                </div>
+                <p class="note">پس از دانلود، فایل موقت از روی این رایانه حذف می‌شود.</p>
+            </section>
+        </section>
+
+        <section class="steps" aria-label="مراحل کار">
+            <article>
+                <span>۱</span>
+                <h3>بارگذاری</h3>
+                <p>سند DOCX، TXT یا PDF را انتخاب کنید.</p>
+            </article>
+            <article>
+                <span>۲</span>
+                <h3>پردازش</h3>
+                <p>نام‌ها و شماره‌های تلفن مطابق الگوی فعلی استخراج می‌شوند.</p>
+            </article>
+            <article>
+                <span>۳</span>
+                <h3>دریافت خروجی</h3>
+                <p>فایل Excel و نسخه بدون شماره تلفن را دانلود کنید.</p>
+            </article>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <p>
+            حریم‌بان اسناد یک ابزار محلی برای استخراج نام و شماره تلفن و ساخت نسخه بدون شماره تلفن است.
+            این وب‌سایت روی رایانه شما اجرا می‌شود و فایل‌های موقت پس از دانلود حذف می‌گردند.
+            همه قالب‌های نام یا شماره، و همه اطلاعات شخصی، لزوماً شناسایی یا حذف نمی‌شوند.
+        </p>
+    </footer>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
