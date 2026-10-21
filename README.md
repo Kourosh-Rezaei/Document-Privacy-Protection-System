@@ -15,6 +15,7 @@ The project currently supports **DOCX**, **TXT**, and **PDF** files.
 - Create a new TXT file with phone numbers removed
 - Create a new PDF file with phone numbers removed
 - Append extracted records to an existing Excel workbook
+- User-interface (Telegram bot on web)
 
 ## Requirements
 
@@ -25,21 +26,12 @@ The project currently supports **DOCX**, **TXT**, and **PDF** files.
 - `python-dotenv` ==  1.2.3
 - `python-telegram-bot` == 22.8
 - `httpx` == 0.28.1
+- `Flask` == 3.1.2
 
 Install the dependencies:
 
 ```bash
 pip install python-docx openpyxl pymupdf
-```
-
-## Project Structure
-
-```text
-Document-Privacy-Protection-System/
-├── control.py
-├── functions.py
-├── README.md
-└── requirements.txt
 ```
 
 ## Usage
@@ -103,46 +95,6 @@ Alice Brown, +44 123 456 7890
 John Smith,
 Alice Brown,
 ```
-
-## Main Functions
-
-The functions are defined in `functions.py`.
-
-| Function | Purpose |
-| --- | --- |
-| `read_docx(file_path)` | Extracts text from a DOCX file |
-| `read_txt(file_path)` | Reads a TXT file using UTF-8 encoding |
-| `read_pdf(file_path)` | Extracts text from a PDF file |
-| `prepare_data(text)` | Finds matching names and phone numbers and returns a list of dictionaries |
-| `open_excel(excel_path, data)` | Creates or updates an Excel workbook with extracted records |
-| `remove_phone_numbers_docx(input_file, output_file)` | Removes matching phone numbers from a DOCX file |
-| `remove_phone_numbers_txt(input_file, output_file)` | Removes matching phone numbers from a TXT file |
-| `remove_phone_numbers_pdf(input_file, output_file)` | Removes matching phone numbers from extracted PDF text and writes a new PDF |
-| `create_pdf(text, output_file)` | Creates a PDF file from text |
-
-## Unit Tests
-
-Unit tests can be written with `pytest`. If the test file is named `test_functions.py`, install pytest:
-
-```bash
-pip install pytest
-```
-
-Run the tests from the project directory:
-
-```bash
-pytest
-```
-
-Tests should cover successful processing and relevant edge cases for each function, including missing or invalid input files, text with no matching phone numbers, and checking that names remain after phone numbers are removed.
-
-## Notes and Limitations
-
-- The name and phone-number extraction in `prepare_data()` uses a Regular Expression. It does not identify every possible name or international phone-number format.
-- The current PDF removal function extracts the PDF text, removes matching phone-number patterns, and creates a new PDF from that text. It does **not** edit the original PDF in place, and the new PDF may not preserve the original layout, fonts, images, or other formatting.
-- The phone-number patterns used for PDF processing and DOCX/TXT processing are not identical, so supported number formats may differ by file type.
-- The program writes a separate output file; it does not overwrite the input document when different paths are provided.
-- When using an existing Excel workbook, records are appended to its active sheet.
 
 ## Future Improvements
 
