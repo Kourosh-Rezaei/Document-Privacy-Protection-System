@@ -150,7 +150,7 @@ Tests should cover successful processing and relevant edge cases for each functi
 - [x] support PDF format
 - [x] Add unit tests
 - [x] Detect phone numbers from multiple international formats
-- [ ] website development
+- [x] website development
 - [x] Telegram bot development
 
 ## Team
